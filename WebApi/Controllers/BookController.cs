@@ -11,6 +11,7 @@ using static WebApi.BookOperations.UpdateBookCommand;
 using WebApi.BookOperations;
 
 using WebApi.BookOperations.GetByIdBookQuery;
+using WebApi.BookOperations.DeleteBook;
 
 namespace WebApi.AddControllers
 {
@@ -35,7 +36,7 @@ namespace WebApi.AddControllers
             return Ok(result);
         }
 
-       
+            
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
@@ -99,12 +100,20 @@ namespace WebApi.AddControllers
         [HttpDelete]
         public IActionResult DeleteBook (int id)
         {
-            var book = _context.Books.SingleOrDefault(x => x.Id == id);
-            if(book is null)
-            return BadRequest();
+            DeleteBookCommand command = new DeleteBookCommand(_context);
 
-            _context.Books.Remove(book);
-            _context.SaveChanges();
+            try
+            {
+                command.Handle(id);
+                
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+
+
             return Ok();
             
         }
