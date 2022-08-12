@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using WebApi.DBOperations;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace WebApi
 {
@@ -35,6 +36,7 @@ namespace WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
             });
             services.AddDbContext<BookStoreDbContext>(options => options.UseInMemoryDatabase(databaseName:"BookStoreDB"));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         }
 
